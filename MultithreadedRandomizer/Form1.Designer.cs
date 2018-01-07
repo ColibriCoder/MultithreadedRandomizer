@@ -34,10 +34,8 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.start = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.stop = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -53,7 +51,7 @@
             // 
             this.threadsAmount.Location = new System.Drawing.Point(64, 26);
             this.threadsAmount.Name = "threadsAmount";
-            this.threadsAmount.Size = new System.Drawing.Size(100, 20);
+            this.threadsAmount.Size = new System.Drawing.Size(107, 20);
             this.threadsAmount.TabIndex = 1;
             this.threadsAmount.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -73,10 +71,11 @@
             this.listView1.GridLines = true;
             this.listView1.Location = new System.Drawing.Point(15, 82);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(560, 84);
+            this.listView1.Size = new System.Drawing.Size(560, 217);
             this.listView1.TabIndex = 4;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // columnHeader1
             // 
@@ -85,15 +84,7 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "Random string";
-            this.columnHeader2.Width = 594;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(15, 173);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(560, 126);
-            this.dataGridView1.TabIndex = 5;
+            this.columnHeader2.Width = 496;
             // 
             // start
             // 
@@ -105,23 +96,22 @@
             this.start.UseVisualStyleBackColor = true;
             this.start.Click += new System.EventHandler(this.start_Click);
             // 
-            // label2
+            // stop
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(114, 57);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "label2";
+            this.stop.Location = new System.Drawing.Point(96, 53);
+            this.stop.Name = "stop";
+            this.stop.Size = new System.Drawing.Size(75, 23);
+            this.stop.TabIndex = 7;
+            this.stop.Text = "Stop";
+            this.stop.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(587, 311);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.stop);
             this.Controls.Add(this.start);
-            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.validator);
             this.Controls.Add(this.threadsAmount);
@@ -129,7 +119,6 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -143,9 +132,8 @@
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button start;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button stop;
     }
 }
 

@@ -26,7 +26,7 @@ namespace MultithreadedRandomizer
         {
             try
             {
-                connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Colibri\source\repos\MultithreadedRandomizer\MultithreadedRandomizer\App_data\randomStrings.mdb";
+                connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Colibri\source\repos\MultithreadedRandomizer\MultithreadedRandomizer\MultithreadedRandomizer\App_data\randomStrings.mdb";
                 connection.Open();
                 connection.Close();
             }
@@ -73,7 +73,7 @@ namespace MultithreadedRandomizer
             connection.Open();
                 OleDbCommand command = new OleDbCommand();
                 command.Connection = connection;
-                command.CommandText = "INSERT INTO randomStrings (Timed) VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "')";
+                command.CommandText = "INSERT INTO randomStrings (GenerationTime) VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss") + "')";
 
                 command.ExecuteNonQuery();
                 MessageBox.Show("saved");
@@ -131,6 +131,11 @@ namespace MultithreadedRandomizer
                 chars[i] = allowedChars[rnd.Next(0, allowedChars.Length)];
 
             return new string(chars);
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
