@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 using System.Data.OleDb;
+using System.Threading;
 
 namespace MultithreadedRandomizer
 {
@@ -17,6 +17,8 @@ namespace MultithreadedRandomizer
         OleDbConnection connection = new OleDbConnection();
         const string allowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#@$^*()";
         static Random rnd = new Random();
+        bool generatorActive = false;
+
         public Form1()
         {
             InitializeComponent();
@@ -24,6 +26,7 @@ namespace MultithreadedRandomizer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             try
             {
                 connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Colibri\source\repos\MultithreadedRandomizer\MultithreadedRandomizer\MultithreadedRandomizer\App_data\randomStrings.mdb";
@@ -64,21 +67,41 @@ namespace MultithreadedRandomizer
 
         
 
-
-   
-        
-
         private void start_Click(object sender, EventArgs e)
         {
-            connection.Open();
-                OleDbCommand command = new OleDbCommand();
-                command.Connection = connection;
-                command.CommandText = "INSERT INTO randomStrings (GenerationTime) VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss") + "')";
 
-                command.ExecuteNonQuery();
-                MessageBox.Show("saved");
-                connection.Close();
-            
+            Int32 threadsValue = Int32.Parse(threadsAmount.Text);
+
+            Thread[] threadsArray = new Thread[threadsValue];
+            //RandomStringItem[] threadsItems = new RandomStringItem[threadsValue + 1];
+
+            /*
+            for (int i = 0; i < threadsValue; i++)
+            {
+                threadsItems[i] = new RandomStringItem(i + 1);
+            }
+            */
+
+            generatorActive = true;
+
+            for (int i = 0; i < threadsValue; i++)
+            {
+                threadsArray[i] = new Thread(() => startThredGeneration(i));
+                threadsArray[i].Start();
+            }
+            /*
+            Thread t = new Thread(print1);
+            t.Start();
+
+            connection.Open();
+            OleDbCommand command = new OleDbCommand();
+            command.Connection = connection;
+            command.CommandText = "INSERT INTO randomStrings (GenerationTime) VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss") + "')";
+
+            command.ExecuteNonQuery();
+            MessageBox.Show("saved");
+            connection.Close();
+            */
 
 
 
@@ -121,8 +144,67 @@ namespace MultithreadedRandomizer
            listView1.Items.Add(item);
            */
         }
-
+        private void stop_Click(object sender, EventArgs e)
+        {
+            generatorActive = false;
+        }
         /// Functions
+        /// 
+        void startThredGeneration(int index)
+        {
+            RandomStringItem rsi = new RandomStringItem(index);
+            while (generatorActive)
+            {
+                rsi.updateItem(DateTime.Now, generateRandomString());
+                ListViewItem item = new ListViewItem(rsi.getId().ToString());
+
+                if (listView1.InvokeRequired)
+                {
+                    listView1.Invoke(new MethodInvoker(delegate
+                    {
+                        item.SubItems.Add(rsi.getRandomString());
+                        listView1.Items.Add(item);
+                    }));
+                }
+                else
+                {
+                    item.SubItems.Add(rsi.getRandomString());
+                    listView1.Items.Add(item);
+                }
+                Thread.Sleep(2000);
+            }
+        }
+
+            /*
+        void createTread(int id)
+        {
+
+            RandomStringItem thread = new RandomStringItem(id, DateTime.Now, generateRandomString());
+
+            
+        }
+        */
+        /*
+        void addToList ()
+        {
+            ListViewItem item = new ListViewItem(id.ToString());
+
+            if (listView1.InvokeRequired)
+            {
+                listView1.Invoke(new MethodInvoker(delegate
+                {
+                    item.SubItems.Add(thread.getRandomString());
+                    listView1.Items.Add(item);
+                }));
+            }
+            else
+            {
+                item.SubItems.Add(generateRandomString());
+                listView1.Items.Add(item);
+            }
+        }
+        */
+
         internal static string generateRandomString()
         {
             int strLenght = rnd.Next(6, 16);
@@ -137,5 +219,7 @@ namespace MultithreadedRandomizer
         {
 
         }
+
+        
     }
 }
