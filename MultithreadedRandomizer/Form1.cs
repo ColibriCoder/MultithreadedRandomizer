@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 using System.Data.OleDb;
 using System.Threading;
 
@@ -120,19 +121,25 @@ namespace MultithreadedRandomizer
         void createThread()
         {
             Thread t = new Thread(startGeneration);
+            OleDbConnection connection = new OleDbConnection();
+            connection.ConnectionString = DatabaseInfo.path;
+            lock (connection) ;
             t.Start();
+            connection.Close();
         }
 
         void startGeneration()
         {
+
             Random rnd = new Random();
             int threadID = Thread.CurrentThread.ManagedThreadId;
             string generatedString;
             int sleepTime = rnd.Next(500, 2000);
 
-            OleDbConnection connection = new OleDbConnection();
-            connection.ConnectionString = DatabaseInfo.path;
-            connection.Open();
+            
+            //connection.Open();
+            
+            
             //RandomStringItem rsi = new RandomStringItem(currentThreadsAmount);
             
             while (generatorActive)
@@ -154,17 +161,21 @@ namespace MultithreadedRandomizer
                     item.SubItems.Add(generatedString);
                     listView1.Items.Add(item);
                 }
-
+                connection.OpenAsync();
                 OleDbCommand command = new OleDbCommand();
                 command.Connection = connection;
                 command.CommandText = "INSERT INTO randomStrings (ThreadID, GenerationTime, Data) VALUES (" + threadID + ",'" + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss") + "', '" + generatedString + "')";
-                
+
+                //SqlTransaction str = con.BeginTransaction();
+                //OleDbTransaction tran = connection.BeginTransaction();
                 command.ExecuteNonQueryAsync();
+                //tran.Commit();
+                
 
                 Thread.Sleep(10);
             }
-
-            connection.Close();
+            //con.Close();
+            
         }
 
         internal static string generateRandomString()
