@@ -1,6 +1,6 @@
 # MultithreadedRandomizer
 
-MultithreadedRandomizer is a app for generating random 5-10 length character strings in a multiple threads and storing them in a Microsoft Access database file (mdb).
+MultithreadedRandomizer is an app for generating random 5-10 length character strings in a multiple threads and storing them in a Microsoft Access database file (mdb).
 
 Usage:
 
