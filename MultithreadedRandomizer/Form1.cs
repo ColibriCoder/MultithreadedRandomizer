@@ -27,6 +27,8 @@ namespace MultithreadedRandomizer
             threadsManager = new ThreadsManager();
 
             threadsManager.bindListView(listView1);
+            Console.WriteLine("aaaaaaaaaaaaaaaaaaaa");
+            Console.WriteLine(DatabaseInfo.connectionString);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -65,7 +67,7 @@ namespace MultithreadedRandomizer
         /// TextBox validation
         /// 
 
-        public bool isValid(string text)
+        private bool isValid(string text)
         {
             int textBoxValue;
             if (!string.IsNullOrEmpty(text))

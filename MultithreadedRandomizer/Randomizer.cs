@@ -8,7 +8,7 @@ namespace MultithreadedRandomizer
 {
     class Randomizer
     {
-        const string allowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#@$^*()";
+        private const string allowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#@$^*()";
 
         private static readonly Random _global = new Random();
         [ThreadStatic] private static Random _local;

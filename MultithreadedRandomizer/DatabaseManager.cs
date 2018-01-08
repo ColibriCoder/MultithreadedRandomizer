@@ -9,12 +9,13 @@ namespace MultithreadedRandomizer
 {
     class DatabaseManager
     {
-        string databaseConnectionString;
 
-        OleDbConnection connection = new OleDbConnection();
-        public DatabaseManager(string databaseConnectionString)
+        private OleDbConnection connection;
+
+        public DatabaseManager()
         {
-            this.databaseConnectionString = databaseConnectionString;
+            connection = new OleDbConnection();
+            connection.ConnectionString = DatabaseInfo.connectionString;
         }
 
         public Exception checkConnection()
@@ -34,7 +35,7 @@ namespace MultithreadedRandomizer
 
         public void openConnction()
         {
-            connection.ConnectionString = databaseConnectionString;
+            
             connection.OpenAsync();
         }
 
@@ -48,6 +49,14 @@ namespace MultithreadedRandomizer
             OleDbCommand command = new OleDbCommand();
             command.Connection = connection;
             command.CommandText = commandText;
+            command.ExecuteNonQueryAsync();
+        }
+
+        public void clearTable()
+        {
+            OleDbCommand command = new OleDbCommand();
+            command.Connection = connection;
+            command.CommandText = "DELETE FROM randomStrings";
             command.ExecuteNonQueryAsync();
         }
     }

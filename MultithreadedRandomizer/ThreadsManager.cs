@@ -10,14 +10,14 @@ namespace MultithreadedRandomizer
 {
     class ThreadsManager
     {
-        DatabaseManager databaseManager;
-        ListView destinationListView;
+        private DatabaseManager databaseManager;
+        private ListView destinationListView;
 
         private bool generatorActive = false;
 
         public ThreadsManager()
         {
-            databaseManager = new DatabaseManager(DatabaseInfo.path);
+            databaseManager = new DatabaseManager();
             
             Exception ex;
             ex = databaseManager.checkConnection();
@@ -56,7 +56,7 @@ namespace MultithreadedRandomizer
             t.Start();
         }
 
-        void startGeneration()
+        private void startGeneration()
         {
             Randomizer randomizer = new Randomizer();
             int threadID = Thread.CurrentThread.ManagedThreadId;
