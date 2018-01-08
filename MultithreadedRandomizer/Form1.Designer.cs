@@ -41,7 +41,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 29);
+            this.label1.Location = new System.Drawing.Point(12, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 0;
@@ -49,7 +49,7 @@
             // 
             // threadsAmount
             // 
-            this.threadsAmount.Location = new System.Drawing.Point(64, 26);
+            this.threadsAmount.Location = new System.Drawing.Point(64, 12);
             this.threadsAmount.Name = "threadsAmount";
             this.threadsAmount.Size = new System.Drawing.Size(107, 20);
             this.threadsAmount.TabIndex = 1;
@@ -58,20 +58,25 @@
             // validator
             // 
             this.validator.AutoSize = true;
-            this.validator.Location = new System.Drawing.Point(171, 29);
+            this.validator.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.validator.ForeColor = System.Drawing.Color.Red;
+            this.validator.Location = new System.Drawing.Point(177, 15);
             this.validator.Name = "validator";
             this.validator.Size = new System.Drawing.Size(0, 13);
             this.validator.TabIndex = 2;
             // 
             // listView1
             // 
+            this.listView1.BackColor = System.Drawing.SystemColors.Window;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
             this.listView1.GridLines = true;
-            this.listView1.Location = new System.Drawing.Point(15, 82);
+            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listView1.Location = new System.Drawing.Point(15, 38);
+            this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(560, 217);
+            this.listView1.Size = new System.Drawing.Size(557, 411);
             this.listView1.TabIndex = 4;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -80,6 +85,7 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Thread ID";
+            this.columnHeader1.Width = 70;
             // 
             // columnHeader2
             // 
@@ -88,9 +94,10 @@
             // 
             // start
             // 
-            this.start.Location = new System.Drawing.Point(15, 52);
+            this.start.Enabled = false;
+            this.start.Location = new System.Drawing.Point(356, 10);
             this.start.Name = "start";
-            this.start.Size = new System.Drawing.Size(75, 23);
+            this.start.Size = new System.Drawing.Size(105, 23);
             this.start.TabIndex = 6;
             this.start.Text = "Start";
             this.start.UseVisualStyleBackColor = true;
@@ -98,9 +105,10 @@
             // 
             // stop
             // 
-            this.stop.Location = new System.Drawing.Point(96, 53);
+            this.stop.Enabled = false;
+            this.stop.Location = new System.Drawing.Point(467, 10);
             this.stop.Name = "stop";
-            this.stop.Size = new System.Drawing.Size(75, 23);
+            this.stop.Size = new System.Drawing.Size(105, 23);
             this.stop.TabIndex = 7;
             this.stop.Text = "Stop";
             this.stop.UseVisualStyleBackColor = true;
@@ -110,7 +118,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(587, 311);
+            this.ClientSize = new System.Drawing.Size(584, 461);
             this.Controls.Add(this.stop);
             this.Controls.Add(this.start);
             this.Controls.Add(this.listView1);
