@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace MultithreadedRandomizer
 {
-    public class ThreadSafeRandom
+    class Randomizer
     {
+        const string allowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#@$^*()";
+
         private static readonly Random _global = new Random();
         [ThreadStatic] private static Random _local;
 
-        public ThreadSafeRandom()
+        public Randomizer()
         {
             if (_local == null)
             {
@@ -23,9 +25,20 @@ namespace MultithreadedRandomizer
                 _local = new Random(seed);
             }
         }
-        public int Next(int min, int max)
+
+        public int GetRandomInt(int min, int max)
         {
             return _local.Next(min, max);
+        }
+
+        public string generateRandomString(int min, int max)
+        {
+            int strLenght = GetRandomInt(min, max + 1);
+            char[] chars = new char[strLenght];
+            for (int i = 0; i < strLenght; i++)
+                chars[i] = allowedChars[_local.Next(0, allowedChars.Length)];
+
+            return new string(chars);
         }
     }
 }

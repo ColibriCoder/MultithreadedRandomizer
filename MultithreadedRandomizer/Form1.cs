@@ -15,10 +15,7 @@ namespace MultithreadedRandomizer
 {
     public partial class Form1 : Form
     {
-        DatabaseManager databaseManager;
-        const string allowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#@$^*()";
-        static Random rnd = new Random();
-        bool generatorActive = false;
+        ThreadsManager threadsManager;
 
         public Form1()
         {
@@ -27,12 +24,9 @@ namespace MultithreadedRandomizer
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            databaseManager = new DatabaseManager(DatabaseInfo.path);
+            threadsManager = new ThreadsManager();
 
-            Exception ex;
-            ex = databaseManager.checkConnection();
-            if (ex != null)
-                MessageBox.Show("Error connecting database: " + ex);
+            threadsManager.bindListView(listView1);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -41,42 +35,7 @@ namespace MultithreadedRandomizer
                 start.Enabled = true;
             else
                 start.Enabled = false;
-            /*
-            int treadsValue;
-            start.Enabled = false;
-            if (!string.IsNullOrEmpty(threadsAmount.Text))
-            {
-                if (!int.TryParse(threadsAmount.Text, out treadsValue))
-                {
-                    validator.Text = "Value must be a number!";
-                }
-                else
-                {
-                    if (treadsValue < 2)
-                    {
-                        validator.Text = "Value must be more than 2!";
-
-                    }
-                    else if (treadsValue > 15)
-                    {
-                        validator.Text = "Value must be less than 16!";
-
-                    }
-                    else
-                    {
-                        validator.Text = "";
-                        start.Enabled = true;
-                    }
-                }
-            }
-            else
-            {
-                validator.Text = "";
-            }
-            */
         }
-
-        
 
         private void start_Click(object sender, EventArgs e)
         {
@@ -84,25 +43,20 @@ namespace MultithreadedRandomizer
             stop.Enabled = true;
             threadsAmount.Enabled = false;
 
-            databaseManager.openConnction();
+            threadsManager.activateGeneration();
 
-            int threadsValue = Int16.Parse(threadsAmount.Text);
+            threadsManager.createThreads(int.Parse(threadsAmount.Text));
 
-            generatorActive = true;
-
-            for (int i = 0; i < threadsValue; i++)
-            {        
-                createThread();
-            }
         }
         private void stop_Click(object sender, EventArgs e)
         {
             start.Enabled = true;
             stop.Enabled = false;
             threadsAmount.Enabled = true;
-            databaseManager.closeConnection();
-            generatorActive = false;
+            threadsManager.deactivateGeneration();
         }
+
+
         ///***********************************************
         /// Functions 
         ///***********************************************
@@ -139,86 +93,12 @@ namespace MultithreadedRandomizer
                         return true;
                     }
                 }
-
             }
             else
             {
                 validator.Text = "";
                 return false;
             }
-        }
-
-        void createThread()
-        {
-            Thread t = new Thread(startGeneration);
-            t.Start();
-        }
-        
-        void startGeneration()
-        {
-            ThreadSafeRandom tsr = new ThreadSafeRandom();
-            int threadID = Thread.CurrentThread.ManagedThreadId;
-            string generatedString;
-            bool firstExecution = true;
-
-            while (generatorActive)
-            {
-                if (firstExecution)
-                {
-                    firstExecution = false;
-                    Thread.Sleep(tsr.Next(500, 2000));
-                    if (!generatorActive)
-                        Thread.CurrentThread.Abort();
-                }
-
-                generatedString = generateRandomString();
-
-                databaseManager.addItem("INSERT INTO randomStrings (ThreadID, GenerationTime, Data) VALUES (" + threadID + ",'" + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss") + "', '" + generatedString + "')");
-
-                ListViewItem item = new ListViewItem(threadID.ToString());
-
-                if (listView1.InvokeRequired)
-                {
-                    listView1.Invoke(new MethodInvoker(delegate
-                    {
-                        if (listView1.Items.Count >= 20)
-                            listView1.TopItem.Remove();
-
-                        item.SubItems.Add(generatedString);
-                        listView1.Items.Add(item);
-                    }));
-                }
-                else
-                {
-                    item.SubItems.Add(generatedString);
-                    listView1.Items.Add(item);
-                }
-                
-                Thread.Sleep(tsr.Next(500, 2000));
-            }
-            firstExecution = true;
-        }
-
-        internal static string generateRandomString()
-        {
-            int strLenght = rnd.Next(6, 16);
-            char[] chars = new char[strLenght];
-            for (int i = 0; i < strLenght; i++)
-                chars[i] = allowedChars[rnd.Next(0, allowedChars.Length)];
-
-            return new string(chars);
-        }
-
-        int generateRandomInt(int min, int max)
-        {
-            Random rnd = new Random();
-            return rnd.Next(min, max);
-        }
-
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-
         }
     }
 }
