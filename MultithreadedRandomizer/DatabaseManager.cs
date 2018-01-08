@@ -45,13 +45,10 @@ namespace MultithreadedRandomizer
 
         public void addItem(string commandText)
         {
-            
             OleDbCommand command = new OleDbCommand();
             command.Connection = connection;
             command.CommandText = commandText;
-
             command.ExecuteNonQueryAsync();
         }
-
     }
 }

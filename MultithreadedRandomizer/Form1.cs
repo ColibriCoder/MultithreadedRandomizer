@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -17,7 +16,6 @@ namespace MultithreadedRandomizer
     public partial class Form1 : Form
     {
         DatabaseManager databaseManager;
-        //OleDbConnection connection = new OleDbConnection();
         const string allowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#@$^*()";
         static Random rnd = new Random();
         bool generatorActive = false;
@@ -35,24 +33,15 @@ namespace MultithreadedRandomizer
             ex = databaseManager.checkConnection();
             if (ex != null)
                 MessageBox.Show("Error connecting database: " + ex);
-
-            /*
-            try
-            {
-                connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Colibri\source\repos\MultithreadedRandomizer\MultithreadedRandomizer\MultithreadedRandomizer\App_data\randomStrings.mdb";
-                connection.Open();
-                connection.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error connecting db: " + ex);
-            }
-            */
         }
-
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            if (isValid(threadsAmount.Text))
+                start.Enabled = true;
+            else
+                start.Enabled = false;
+            /*
             int treadsValue;
             start.Enabled = false;
             if (!string.IsNullOrEmpty(threadsAmount.Text))
@@ -84,6 +73,7 @@ namespace MultithreadedRandomizer
             {
                 validator.Text = "";
             }
+            */
         }
 
         
@@ -92,52 +82,84 @@ namespace MultithreadedRandomizer
         {
             start.Enabled = false;
             stop.Enabled = true;
+            threadsAmount.Enabled = false;
+
             databaseManager.openConnction();
-            Int32 threadsValue = Int32.Parse(threadsAmount.Text);
+
+            int threadsValue = Int16.Parse(threadsAmount.Text);
 
             generatorActive = true;
-
 
             for (int i = 0; i < threadsValue; i++)
             {        
                 createThread();
             }
-
-           
         }
         private void stop_Click(object sender, EventArgs e)
         {
             start.Enabled = true;
             stop.Enabled = false;
+            threadsAmount.Enabled = true;
             databaseManager.closeConnection();
             generatorActive = false;
         }
+        ///***********************************************
         /// Functions 
-        
+        ///***********************************************
+
+        ///*******************
+        /// TextBox validation
+        /// 
+
+        public bool isValid(string text)
+        {
+            int textBoxValue;
+            if (!string.IsNullOrEmpty(text))
+            {
+                if (!int.TryParse(threadsAmount.Text, out textBoxValue))
+                {
+                    validator.Text = "Value must be a number!";
+                    return false;
+                }
+                else
+                {
+                    if (textBoxValue < 2)
+                    {
+                        validator.Text = "Value must be more than 2!";
+                        return false;
+                    }
+                    else if (textBoxValue > 15)
+                    {
+                        validator.Text = "Value must be less than 16!";
+                        return false;
+                    }
+                    else
+                    {
+                        validator.Text = "";
+                        return true;
+                    }
+                }
+
+            }
+            else
+            {
+                validator.Text = "";
+                return false;
+            }
+        }
+
         void createThread()
         {
             Thread t = new Thread(startGeneration);
-
-            
-            /*
-            OleDbConnection connection = new OleDbConnection();
-            connection.ConnectionString = DatabaseInfo.path;
-            lock (connection) ;
-            */
-
             t.Start();
-
-            
         }
         
         void startGeneration()
         {
-
             ThreadSafeRandom tsr = new ThreadSafeRandom();
             int threadID = Thread.CurrentThread.ManagedThreadId;
             string generatedString;
             bool firstExecution = true;
-
 
             while (generatorActive)
             {
@@ -153,13 +175,15 @@ namespace MultithreadedRandomizer
 
                 databaseManager.addItem("INSERT INTO randomStrings (ThreadID, GenerationTime, Data) VALUES (" + threadID + ",'" + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss") + "', '" + generatedString + "')");
 
-                //rsi.updateItem(DateTime.Now, generateRandomString());
                 ListViewItem item = new ListViewItem(threadID.ToString());
 
                 if (listView1.InvokeRequired)
                 {
                     listView1.Invoke(new MethodInvoker(delegate
                     {
+                        if (listView1.Items.Count >= 20)
+                            listView1.TopItem.Remove();
+
                         item.SubItems.Add(generatedString);
                         listView1.Items.Add(item);
                     }));
@@ -169,14 +193,10 @@ namespace MultithreadedRandomizer
                     item.SubItems.Add(generatedString);
                     listView1.Items.Add(item);
                 }
-
                 
                 Thread.Sleep(tsr.Next(500, 2000));
-
             }
             firstExecution = true;
-            //con.Close();
-            
         }
 
         internal static string generateRandomString()
@@ -193,15 +213,12 @@ namespace MultithreadedRandomizer
         {
             Random rnd = new Random();
             return rnd.Next(min, max);
-
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
 
         }
-
-
     }
-
 }
