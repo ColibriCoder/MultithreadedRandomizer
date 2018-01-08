@@ -127,23 +127,17 @@ namespace MultithreadedRandomizer
             t.Start();
             connection.Close();
         }
-
+        
         void startGeneration()
         {
 
-            Random rnd = new Random();
+            ThreadSafeRandom tsr = new ThreadSafeRandom();
             int threadID = Thread.CurrentThread.ManagedThreadId;
             string generatedString;
-            int sleepTime = rnd.Next(500, 2000);
-
-            
-            //connection.Open();
-            
-            
-            //RandomStringItem rsi = new RandomStringItem(currentThreadsAmount);
             
             while (generatorActive)
             {
+                Thread.Sleep(tsr.Next(500, 2000));
                 generatedString = generateRandomString();
                 //rsi.updateItem(DateTime.Now, generateRandomString());
                 ListViewItem item = new ListViewItem(threadID.ToString());
@@ -168,11 +162,11 @@ namespace MultithreadedRandomizer
 
                 //SqlTransaction str = con.BeginTransaction();
                 //OleDbTransaction tran = connection.BeginTransaction();
-                command.ExecuteNonQueryAsync();
+                command.ExecuteNonQuery();
                 //tran.Commit();
                 
-
-                Thread.Sleep(10);
+                
+                
             }
             //con.Close();
             
@@ -186,6 +180,13 @@ namespace MultithreadedRandomizer
                 chars[i] = allowedChars[rnd.Next(0, allowedChars.Length)];
 
             return new string(chars);
+        }
+
+        int generateRandomInt(int min, int max)
+        {
+            Random rnd = new Random();
+            return rnd.Next(min, max);
+
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)

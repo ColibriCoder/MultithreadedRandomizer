@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseInfo.cs" />
+    <Compile Include="DatabaseManager.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,12 +71,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomStringItem.cs" />
-    <Compile Include="randomStringsDataSet5.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>randomStringsDataSet5.xsd</DependentUpon>
-    </Compile>
+    <Compile Include="ThreadSafeRandom.cs" />
     <Compile Include="utility.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -98,17 +94,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="randomStringsDataSet5.xsc">
-      <DependentUpon>randomStringsDataSet5.xsd</DependentUpon>
-    </None>
-    <None Include="randomStringsDataSet5.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>randomStringsDataSet5.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="randomStringsDataSet5.xss">
-      <DependentUpon>randomStringsDataSet5.xsd</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

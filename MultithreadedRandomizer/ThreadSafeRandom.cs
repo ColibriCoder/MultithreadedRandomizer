@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MultithreadedRandomizer
+{
+    public class ThreadSafeRandom
+    {
+        private static readonly Random _global = new Random();
+        [ThreadStatic] private static Random _local;
+
+        public ThreadSafeRandom()
+        {
+            if (_local == null)
+            {
+                int seed;
+                lock (_global)
+                {
+                    seed = _global.Next();
+                }
+                _local = new Random(seed);
+            }
+        }
+        public int Next(int min, int max)
+        {
+            return _local.Next(min, max);
+        }
+    }
+}
