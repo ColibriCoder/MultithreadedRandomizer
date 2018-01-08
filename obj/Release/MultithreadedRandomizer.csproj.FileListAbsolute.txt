@@ -7,3 +7,4 @@ C:\Users\Colibri\source\repos\MultithreadedRandomizer\MultithreadedRandomizer\Mu
 C:\Users\Colibri\source\repos\MultithreadedRandomizer\MultithreadedRandomizer\MultithreadedRandomizer\obj\Release\MultithreadedRandomizer.csproj.CoreCompileInputs.cache
 C:\Users\Colibri\source\repos\MultithreadedRandomizer\MultithreadedRandomizer\MultithreadedRandomizer\obj\Release\MultithreadedRandomizer.exe
 C:\Users\Colibri\source\repos\MultithreadedRandomizer\MultithreadedRandomizer\MultithreadedRandomizer\obj\Release\MultithreadedRandomizer.pdb
+C:\Users\Colibri\source\repos\MultithreadedRandomizer\MultithreadedRandomizer\MultithreadedRandomizer\obj\Release\MultithreadedRandomizer.csprojResolveAssemblyReference.cache
